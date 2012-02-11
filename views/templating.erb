@@ -1,0 +1,24 @@
+<script type="text/javascript">
+  window.bootstrap = {
+	  // bootstrap the data: http://documentcloud.github.com/backbone/#FAQ-bootstrap
+	  dogs: <%= @dogs.to_json %>
+  }
+</script>
+
+<script type="text/template" id="element-template">
+	<div>
+		<strong><%%= name %></strong>
+		<p><%%= description %></p>
+	</div>
+</script>
+
+<div id="box">
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var dog = { name:"Toby", description: "Louise want's him" };
+	var dog_tmp = _.template("Hello: <%%= name %>");
+	$('#box').append(dog_tmp(dog));
+});
+</script>

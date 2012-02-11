@@ -1,0 +1,25 @@
+
+<script type="text/javascript">
+  window.bootstrap = {
+	  // bootstrap the data: http://documentcloud.github.com/backbone/#FAQ-bootstrap
+	  dogs: <%= @dogs.to_json %>
+  }
+</script>
+
+<script type="text/template" id="element-template">
+	<div>
+		<strong><%%= name %></strong>
+		<p><%%= description %></p>
+	</div>
+</script>
+
+<!-- My javascript -->
+<script type="text/javascript" src="js/app/dogs.js"></script>
+<!-- ============= -->
+
+<h1>Some basic backbone</h1>
+<p>With some basic text<p>
+<ul>
+	<div id="playground">
+	</div>
+</ul>
