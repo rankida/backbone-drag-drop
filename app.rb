@@ -39,3 +39,7 @@ get '/templating' do
   erb :templating
 end
 
+get '/sortable' do
+  erb :sortable
+end
+
