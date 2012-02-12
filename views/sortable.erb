@@ -1,20 +1,72 @@
 <script>
+  // MODELS
+	window.Elements = Backbone.Model.extend({});
+	
+	window.ElementCollection = Backbone.Collection.extend({
+		model: Elements
+	});
+
+	
+	// GLOBAL DATA
+	window.Elements = new ElementCollection();
+	
+	
   $(function() {
+    
+    // VIEWS
+  	window.ElementView = Backbone.View.extend({
+  		tagName:"li",
+
+  		template: _.template("<strong><%%= name %></strong>"),
+
+  		render: function() {
+  			this.$el.html(this.template(this.model.toJSON()));
+  			return this;
+  		}
+  	});
+
+  	window.AppView = Backbone.View.extend({
+  		el: "#backbonelist",
+  		collection: window.Elements,
+
+  		initialize: function() {
+  			_.bindAll(this, 'appendItem', 'appendItems'); // remember: every function that uses 'this' as the current object should be in here
+
+  			this.collection.bind('reset', this.appendItems); // collection event binder
+  			this.collection.bind('add', this.appendItem);
+  		},
+
+  		appendItem: function(item) {
+  		  var elementView = new ElementView({ model: item });
+  		  $(this.el).append(elementView.render().el);
+  		},
+
+  		appendItems: function(collection) {
+  			for(index in collection.models) // I would like to do this using an each or other itterator method
+  			{
+  				this.appendItem(collection.at(index));
+  			}
+  		}
+  	});
+    
     $("#simplelist").sortable(
       {
         update: function(ev, ui) {
-          $("#helper").text(ui.helper.text());
-          $("#position").text(ui.helper.text());
+          $("#helper").text((ui.helper) ? ui.helper.text() : "undefined");
+          $("#position").text(ui.position);
         }
       });
     $("#simplelist").disableSelection();
+    
+    window.App = new AppView();
+    window.Elements.reset([{ name: "Element A" }, { name: "Element B" }, { name: "Element C" }]); // kick off the rendering
   });
 </script>
 
 <h1>Sortable lists</h1>
 
-<p><strong>ui.helper.text</strong><span id="helper"></span></p>
-<p><strong>ui.position</strong><span id="position"></span></p>
+<p><strong>ui.helper.text </strong><span id="helper"></span></p>
+<p><strong>ui.position </strong><span id="position"></span></p>
 
 <h3>Simple list</h3>
 <ul id="simplelist">
@@ -24,18 +76,6 @@
   <li>Element 4</li>
 </ul>
 
-<h3>Connected lists</h3>
-<ul id="connected1">
-  <li>Element 1</li>
-  <li>Element 2</li>
-  <li>Element 3</li>
-  <li>Element 4</li>
-</ul>
-<ul id="connected2">
-  <li>Element A</li>
-  <li>Element B</li>
-  <li>Element C</li>
-  <li>Element D</li>
-</ul>
-
+<h3>Backbone List</h3>
+<ul id="backbonelist"></ul>
 
