@@ -7,19 +7,31 @@
 </script>
 
 <script type="text/template" id="element-template">
-	<div>
+	<div class="element">
 		<strong><%%= name %></strong>
+		<span class="options">
+		  <i class='icon-move handle'></i>
+		  <i class='icon-pencil'></i>
+		  <i class='icon-trash'></i>
+		</span>
 		<p><%%= description %></p>
 	</div>
 </script>
 
 <!-- My javascript -->
 <script type="text/javascript" src="js/app/dogs.js"></script>
+<link href="/css/dogs.css" rel="stylesheet">
 <!-- ============= -->
 
-<h1>Some basic backbone</h1>
-<p>With some basic text<p>
+<div id="app" class="span6 offset3">
+<h1>Backbone Dogs</h1>
+<p>Here's a list of dogs that I know, shown to you through the wonderful medium of a backbone enhanced website<p>
 <ul>
 	<div id="playground">
 	</div>
 </ul>
+<form id="add-form" class="well form-inline">
+  <input type="text" class="input-small" placeholder="name">
+  <input type="text" placeholder="description">
+  <button id="add-btn" type="submit" class="btn">Add</button>
+</div>
