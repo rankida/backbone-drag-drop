@@ -1,63 +1,66 @@
 <script>
-  // MODELS
-	window.Elements = Backbone.Model.extend({});
-	
-	window.ElementCollection = Backbone.Collection.extend({
-		model: Elements
-	});
+// MODELS
+  window.Elements = Backbone.Model.extend({});
+
+  window.ElementCollection = Backbone.Collection.extend({
+    model: Elements
+  });
 
 	
-	// GLOBAL DATA
-	window.Elements = new ElementCollection();
+  // GLOBAL DATA
+  window.Elements = new ElementCollection();
 	
 	
   $(function() {
     
     // VIEWS
-  	window.ElementView = Backbone.View.extend({
-  		tagName:"li",
+    window.ElementView = Backbone.View.extend({
+      tagName:"li",
 
-  		template: _.template("<strong><%%= name %></strong>"),
+      template: _.template("<span class='handle'><i class='icon-star'></i></span>&nbsp;</span><strong><%%= name %></strong>"),
 
-  		render: function() {
+      render: function() {
   			this.$el.html(this.template(this.model.toJSON()));
   			return this;
-  		}
-  	});
+      }
+    });
 
-  	window.AppView = Backbone.View.extend({
-  		el: "#backbonelist",
+    window.AppView = Backbone.View.extend({
+  		el: "ul#backbonelist",
   		collection: window.Elements,
 
-  		initialize: function() {
+      initialize: function() {
   			_.bindAll(this, 'appendItem', 'appendItems'); // remember: every function that uses 'this' as the current object should be in here
 
   			this.collection.bind('reset', this.appendItems); // collection event binder
   			this.collection.bind('add', this.appendItem);
-  		},
+      },
 
-  		appendItem: function(item) {
+      appendItem: function(item) {
   		  var elementView = new ElementView({ model: item });
   		  $(this.el).append(elementView.render().el);
-  		},
+      },
 
-  		appendItems: function(collection) {
-  			for(index in collection.models) // I would like to do this using an each or other itterator method
-  			{
-  				this.appendItem(collection.at(index));
-  			}
-  			this.$el.sortable();
-  		}
-  	});
+      appendItems: function(collection) {
+  			_.each(collection.models, this.appendItem);
+  			this.$el.sortable({
+  			  handle: ".handle"
+  			  });
+      }
+    });
     
-    $("#simplelist").sortable(
+    $("ul#simplelist").sortable(
       {
         update: function(ev, ui) {
           $("#helper").text((ui.helper) ? ui.helper.text() : "undefined");
           $("#position").text(ui.position);
         }
       });
-    $("#simplelist").disableSelection();
+    $("ul#simplelist").disableSelection();
+    
+    $('a#add').click(function() {
+      window.Elements.add({ name: "New Element" });
+    });
     
     window.App = new AppView();
     window.Elements.reset([{ name: "Element A" }, { name: "Element B" }, { name: "Element C" }]); // kick off the rendering
@@ -79,4 +82,6 @@
 
 <h3>Backbone List</h3>
 <ul id="backbonelist"></ul>
+
+<a id="add" class="btn" href='#'>Click to add another element</a>
 
