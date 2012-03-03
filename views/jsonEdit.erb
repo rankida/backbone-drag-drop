@@ -1,0 +1,70 @@
+<h1>JSON Editor</h1>
+
+<p>Lets edit some JSON:</p>
+<textarea class="txt" id="jsonText"></textarea>
+<span id="image" class="fail" style="background-image: url('img/tick_cross.png'); display:inline-block; height:47px; width:50px;"></span>
+<div></div>
+<button id='format' type="button" class="btn btn-primary">Format JSON</button>
+<button id='clear' type="button" class="btn">Clear</button>
+<p></p>
+<div id="alert" class="alert alert-error"></div>
+
+<style>
+.txt {
+  width: 50%;
+  height: 150px;
+  font-family: Monaco, Consolas, monospace;
+}
+.pass {
+  background-position: 0px;
+}
+.fail {
+  background-position: -50px;
+}
+</style>
+
+<script type="text/javascript">
+function invalidJSON(text) {
+  if (text === "") {
+    return false;
+  }
+  
+  try {
+    JSON.parse(text);
+    return false;
+  } catch (ex) {
+    return ex.message;
+  }
+}
+
+function processText () {
+  var errormsg = invalidJSON($jsonText.val().trim())
+  if (errormsg) {
+    $img.addClass('fail');
+    $img.removeClass('pass');
+    $('#alert').html(errormsg).show();
+  } else {  
+    $img.addClass('pass');
+    $img.removeClass('fail');
+    $('#alert').html("").hide();
+  }
+}
+
+$(document).ready(function (){
+  $img = $('#image');
+  $jsonText = $('#jsonText');
+  
+  $('#alert').hide();
+  processText();
+  
+  $('#clear').click(function () {
+    $jsonText.val("");
+  });
+  
+  $jsonText.keyup(processText);
+  
+  $('#format').click(function (){
+    var v = js_beautify($jsonText.val());
+  });
+});
+</script>

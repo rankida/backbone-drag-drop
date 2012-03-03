@@ -43,3 +43,7 @@ get '/sortable' do
   erb :sortable
 end
 
+get '/jsonEdit' do
+  erb :jsonEdit
+end
+
