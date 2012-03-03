@@ -6,12 +6,13 @@
 <div></div>
 <button id='format' type="button" class="btn btn-primary">Format JSON</button>
 <button id='clear' type="button" class="btn">Clear</button>
+<button id='whitespace' type="button" class="btn">Remove Whitespace</button>
 <p></p>
 <div id="alert" class="alert alert-error"></div>
 
 <style>
 .txt {
-  width: 50%;
+  width: 80%;
   height: 150px;
   font-family: Monaco, Consolas, monospace;
 }
@@ -50,6 +51,10 @@ function processText () {
   }
 }
 
+function stripWhitespace (text) {
+  return text.replace(/(\s|\r\n|\r|\n)/gm, '');
+}
+
 $(document).ready(function (){
   $img = $('#image');
   $jsonText = $('#jsonText');
@@ -61,10 +66,14 @@ $(document).ready(function (){
     $jsonText.val("");
   });
   
+  $('#whitespace').click(function(){
+    $jsonText.val(stripWhitespace($jsonText.val()));
+  })
+  
   $jsonText.keyup(processText);
   
   $('#format').click(function (){
-    var v = js_beautify($jsonText.val());
+    $jsonText.val(js_beautify($jsonText.val()));
   });
 });
 </script>
