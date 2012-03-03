@@ -1,6 +1,5 @@
-<h1>JSON Editor</h1>
+<h1>Rankida's JSON Editor</h1>
 
-<p>Lets edit some JSON:</p>
 <textarea class="txt" id="jsonText"></textarea>
 <span id="image" class="fail" style="background-image: url('img/tick_cross.png'); display:inline-block; height:47px; width:50px;"></span>
 <div></div>
@@ -11,9 +10,12 @@
 <div id="alert" class="alert alert-error"></div>
 
 <style>
+h1 {
+  padding-bottom: 5px;
+}
 .txt {
-  width: 80%;
-  height: 150px;
+  width: 90%;
+  height: 200px;
   font-family: Monaco, Consolas, monospace;
 }
 .pass {
@@ -34,7 +36,7 @@ function invalidJSON(text) {
     JSON.parse(text);
     return false;
   } catch (ex) {
-    return ex.message;
+    return "Invalid JSON: " + ex.message;
   }
 }
 
