@@ -1,0 +1,24 @@
+<h1>JSON Viwer Dev</h1>
+
+<div id='viewer'>
+  
+</div>
+
+<script type="text/javascript">
+$(document).ready(fucntion () {
+  
+  var data_obj = { prop1: "Property 1", prop2: "Another property" };
+  var data_arr = [{ num: "one" }, { num: "two" }];
+  
+  function log(obj) {
+    console.log(typeof(obj) + " " + obj);
+  }
+  
+  function traverse(obj, func){
+    func(obj);
+    _.each(obj, function(o){
+      traverse(o);
+    });
+  }
+});
+</script>

@@ -1,32 +1,43 @@
+<% content_for :head do %>
+  <link href="/css/jsonEdit.css" rel="stylesheet">
+<% end %>
+
 <h1>Rankida's JSON Editor</h1>
+<p>Simple, but does the job. Much like it's author.</p>
 
-<textarea class="txt" id="jsonText"></textarea>
-<span id="image" class="fail" style="background-image: url('img/tick_cross.png'); display:inline-block; height:47px; width:50px;"></span>
-<div></div>
-<button id='format' type="button" class="btn btn-primary">Format JSON</button>
-<button id='clear' type="button" class="btn">Clear</button>
-<button id='whitespace' type="button" class="btn">Remove Whitespace</button>
-<p></p>
-<div id="alert" class="alert alert-error"></div>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#jsonTab" data-toggle="tab">Text Editor</a></li>
+  <li><a href="#viewerTab" data-toggle="tab">Object Viewer</a></li>
+</ul>
 
-<style>
-h1 {
-  padding-bottom: 5px;
-}
-.txt {
-  width: 90%;
-  height: 200px;
-  font-family: Monaco, Consolas, monospace;
-}
-.pass {
-  background-position: 0px;
-}
-.fail {
-  background-position: -50px;
-}
-</style>
+<div class="tab-content">
+  <div id="jsonTab" class="tab-pane active">
+    <textarea class="txt" id="jsonText">{"bindings": [
+            {"ircEvent": "PRIVMSG", "method": "newURI", "regex": "^http://.*"},
+            {"ircEvent": "PRIVMSG", "method": "deleteURI", "regex": "^delete.*"},
+            {"ircEvent": "PRIVMSG", "method": "randomURI", "regex": "^random.*"}
+        ]
+    }</textarea>
+    <span id="image" class="fail" style="background-image: url('img/tick_cross.png'); display:inline-block; height:47px; width:50px;"></span>
+    <div></div>
+    <button id='format' type="button" class="btn btn-primary">Format JSON</button>
+    <button id='clear' type="button" class="btn">Clear</button>
+    <button id='whitespace' type="button" class="btn">Remove Whitespace</button>
+    <p></p>
+    <div id="alert" class="alert alert-error"></div>
+  </div>
+  <div id="viewerTab" class="tab-pane">
+    <div id="viewer">
+      <ul>
+        <li><a href="#">List 1</a></li>
+        <li>List2</li>
+      </ul>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
+
 function invalidJSON(text) {
   if (text === "") {
     return false;
@@ -77,5 +88,13 @@ $(document).ready(function (){
   $('#format').click(function (){
     $jsonText.val(js_beautify($jsonText.val()));
   });
+  
+  $('#viewer').jstree({
+    json_data: {
+      "data" : $jsonText.val()
+    },
+    plugins: ["themes", "json_data", "ui"]
+  });
+  
 });
 </script>

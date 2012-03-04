@@ -1,0 +1,14 @@
+h1 {
+  padding-bottom: 5px;
+}
+.txt {
+  width: 90%;
+  height: 200px;
+  font-family: Monaco, Consolas, monospace;
+}
+.pass {
+  background-position: 0px;
+}
+.fail {
+  background-position: -50px;
+}
