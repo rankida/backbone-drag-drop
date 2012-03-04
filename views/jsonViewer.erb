@@ -1,13 +1,21 @@
 <h1>JSON Viewer Dev</h1>
 
-<div id="div">
-  
-</div>
+<div id="div"></div>
 
-<div>
-  <table id='table' class="table">
-  </table>
-</div>
+<style>
+.element {
+  padding-left:15px;
+  width: 100%;
+}
+.innerElement:hover {
+  background-color: #f5f5f5;
+}
+.icon {
+  font-family: menlo, monospace;
+  font-weight: bold;
+  color: #002A80;
+}
+</style>
 
 <script type="text/javascript">
 
@@ -16,19 +24,6 @@ window.data_arr = [{ num: "one" }, { num: "two" }];
 
 function isArray(obj) {
     return obj.constructor == Array;
-}
-
-function log(key, val) {
-  console.log("<" + key + "> Type: " +typeof(val) + ", toString: " + val);
-}
-
-function traverse(obj, func) {
-  for (i in obj) {
-    func(i, obj[i]);
-    if (typeof(obj[i]) === "object") {
-      traverse(obj[i], func);
-    }
-  }
 }
 
 function traversePrinter(obj, func) {
@@ -41,24 +36,32 @@ function traversePrinter(obj, func) {
   }
 }
 
+function arrayHtml(key, val) {
+  return "<span class='icon'>[]</span> " + key;
+}
+
+function objectHtml(key, val) {
+  return "<span class='icon'>{}</span> " + key;
+}
+
+function nativeHtml(key, val) {
+  return "<span class='icon'>&gt;&gt;</span> " + key + " : \"<i>" + val + "</i>\"";
+}
+
 $(document).ready(function() {
-  $table = $('#table')
   $div = $('#div');
   var html = "";
   
-  function tableAppender(key, val) {
-    $table.append('<tr><td>' + key + ' : ' + val + '</td></tr>');
-  }
-  
   function divAppender(key, val) {
-    html +="<div style='padding-left:15px'>";
+    html +="<div class='element'><div class='innerElement'>";
     if (isArray(val)) {
-      html += "[ ] " + key;
+      html += arrayHtml(key, val);
     } else if (typeof(val) == "object") {
-      html += "{ } " + key;
+      html += objectHtml(key, val);
     } else {
-      html += ">> " + key + " : \"<i>" + val + "</i>\"";
+      html += nativeHtml(key, val);
     }
+    html += "</div>";
   }
   
   traversePrinter([data_obj, data_arr], {start:divAppender, end:function(){ html += '</div>'}});
