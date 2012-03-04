@@ -48,3 +48,7 @@ get '/jsonEdit' do
   erb :jsonEdit
 end
 
+get '/jsonViewer' do
+  erb :jsonViewer
+end
+

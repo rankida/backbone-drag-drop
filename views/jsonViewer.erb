@@ -1,24 +1,69 @@
-<h1>JSON Viwer Dev</h1>
+<h1>JSON Viewer Dev</h1>
 
-<div id='viewer'>
+<div id="div">
   
 </div>
 
+<div>
+  <table id='table' class="table">
+  </table>
+</div>
+
 <script type="text/javascript">
-$(document).ready(fucntion () {
+
+window.data_obj = { prop1: "Property 1", prop2: "Another property" };
+window.data_arr = [{ num: "one" }, { num: "two" }];
+
+function isArray(obj) {
+    return obj.constructor == Array;
+}
+
+function log(key, val) {
+  console.log("<" + key + "> Type: " +typeof(val) + ", toString: " + val);
+}
+
+function traverse(obj, func) {
+  for (i in obj) {
+    func(i, obj[i]);
+    if (typeof(obj[i]) === "object") {
+      traverse(obj[i], func);
+    }
+  }
+}
+
+function traversePrinter(obj, func) {
+  for (i in obj) {
+    func.start(i, obj[i]);
+    if (typeof(obj[i]) === "object") {
+      traversePrinter(obj[i], func);
+    }
+    func.end(i, obj[i]);
+  }
+}
+
+$(document).ready(function() {
+  $table = $('#table')
+  $div = $('#div');
+  var html = "";
   
-  var data_obj = { prop1: "Property 1", prop2: "Another property" };
-  var data_arr = [{ num: "one" }, { num: "two" }];
-  
-  function log(obj) {
-    console.log(typeof(obj) + " " + obj);
+  function tableAppender(key, val) {
+    $table.append('<tr><td>' + key + ' : ' + val + '</td></tr>');
   }
   
-  function traverse(obj, func){
-    func(obj);
-    _.each(obj, function(o){
-      traverse(o);
-    });
+  function divAppender(key, val) {
+    html +="<div style='padding-left:15px'>";
+    if (isArray(val)) {
+      html += "[ ] " + key;
+    } else if (typeof(val) == "object") {
+      html += "{ } " + key;
+    } else {
+      html += ">> " + key + " : \"<i>" + val + "</i>\"";
+    }
   }
+  
+  traversePrinter([data_obj, data_arr], {start:divAppender, end:function(){ html += '</div>'}});
+  $div.append(html);
+  
 });
+
 </script>
