@@ -1,71 +1,20 @@
+<% content_for :head do %>
+  <script type="text/javascript" src="js/jsonViewer.js"></script>
+  <link href="/css/jsonViewer.css" rel="stylesheet">
+<% end %>
+
 <h1>JSON Viewer Dev</h1>
 
 <div id="div"></div>
-
-<style>
-.element {
-  padding-left:15px;
-  width: 100%;
-}
-.innerElement:hover {
-  background-color: #f5f5f5;
-}
-.icon {
-  font-family: menlo, monospace;
-  font-weight: bold;
-  color: #002A80;
-}
-</style>
 
 <script type="text/javascript">
 
 window.data_obj = { prop1: "Property 1", prop2: "Another property" };
 window.data_arr = [{ num: "one" }, { num: "two" }];
 
-function isArray(obj) {
-    return obj.constructor == Array;
-}
-
-function traversePrinter(obj, func) {
-  for (i in obj) {
-    func.start(i, obj[i]);
-    if (typeof(obj[i]) === "object") {
-      traversePrinter(obj[i], func);
-    }
-    func.end(i, obj[i]);
-  }
-}
-
-function arrayHtml(key, val) {
-  return "<span class='icon'>[]</span> " + key;
-}
-
-function objectHtml(key, val) {
-  return "<span class='icon'>{}</span> " + key;
-}
-
-function nativeHtml(key, val) {
-  return "<span class='icon'>&gt;&gt;</span> " + key + " : \"<i>" + val + "</i>\"";
-}
-
 $(document).ready(function() {
-  $div = $('#div');
-  var html = "";
   
-  function divAppender(key, val) {
-    html +="<div class='element'><div class='innerElement'>";
-    if (isArray(val)) {
-      html += arrayHtml(key, val);
-    } else if (typeof(val) == "object") {
-      html += objectHtml(key, val);
-    } else {
-      html += nativeHtml(key, val);
-    }
-    html += "</div>";
-  }
-  
-  traversePrinter([data_obj, data_arr], {start:divAppender, end:function(){ html += '</div>'}});
-  $div.append(html);
+  jsonViewer.create($('#div'), [data_obj, data_arr]);
   
 });
 
